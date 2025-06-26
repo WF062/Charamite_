@@ -1,0 +1,74 @@
+<% post_data = @posts.map do |p| 
+  {
+    name: p.name,
+    image_url: p.image.attached? ? polymorphic_url(p.image) : nil,
+    is_public: p.is_public,
+    id: p.id
+  }
+end %>
+
+<div class="w-full h-full px-6 py-4"
+     x-data='{
+       index: <%= @active_index %>,
+       characters: <%= raw(post_data.to_json) %>
+     }'
+     data-turbo="false">
+
+  <!-- ユーザー情報 -->
+  <div class="absolute top-24 left-6 flex items-center gap-3">
+    <% if @user.icon.attached? %>
+      <%= image_tag @user.icon, class: "w-10 h-10 object-cover rounded-full border" %>
+    <% else %>
+      <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-xs text-gray-500">
+        なし
+      </div>
+    <% end %>
+
+    <div>
+      <h2 class="text-xl font-bold text-gray-900"><%= @user.name %>のページ</h2>
+      <p class="text-gray-600 text-sm"><%= @user.bio.presence || "挨拶一言" %></p>
+    </div>
+  </div>
+
+  <!-- キャラ切り替え表示 -->
+  <div class="flex items-center justify-center h-full relative pt-36">
+    <!-- 左矢印 -->
+    <button @click="index = (index - 1 + characters.length) % characters.length"
+            class="absolute left-0 text-3xl hover:opacity-60">
+      &larr;
+    </button>
+
+    <!-- キャラ表示 -->
+    <div class="flex space-x-8 items-center justify-center w-full max-w-7xl overflow-hidden">
+      <template x-for="(char, i) in characters" :key="i">
+        <div x-show="(i + characters.length - index) % characters.length <= 2"
+             class="flex flex-col items-center transition-all duration-300 ease-in-out">
+
+          <a :href="`/posts/${char.id}`" class="w-64 h-[440px] relative flex items-center justify-center overflow-hidden">
+            <template x-if="char.image_url">
+              <img :src="char.image_url" alt="キャラ画像" class="w-full h-full object-contain" />
+            </template>
+            <template x-if="!char.image_url">
+              <div class="w-full h-full flex items-center justify-center text-gray-400 text-sm bg-gray-50">
+                画像なし
+              </div>
+            </template>
+          </a>
+
+          <div class="mt-2 text-sm text-center text-gray-800">
+            <span x-text="char.name"></span>
+            <template x-if="!char.is_public">
+              <span class="ml-1">🔒</span>
+            </template>
+          </div>
+        </div>
+      </template>
+    </div>
+
+    <!-- 右矢印 -->
+    <button @click="index = (index + 1) % characters.length"
+            class="absolute right-0 text-3xl hover:opacity-60">
+      &rarr;
+    </button>
+  </div>
+</div>
