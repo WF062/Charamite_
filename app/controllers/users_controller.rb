@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :require_login, only: [:show, :mypage, :edit, :update]
+  before_action :require_login, only: [ :show, :mypage, :edit, :update ]
 
   def new
     @user = User.new
@@ -21,9 +21,9 @@ class UsersController < ApplicationController
 
     @posts = if current_user == @user
                @user.posts.order(:created_at)
-             else
+    else
                @user.posts.where(is_public: true).order(:created_at)
-             end
+    end
 
     @post_data = @posts.map do |p|
       {

@@ -16,13 +16,13 @@ Rails.application.routes.draw do
 
   get "/mypage", to: "users#mypage", as: :mypage
 
-  resources :users, only: [:show, :edit, :update]
+  resources :users, only: [ :show, :edit, :update ]
 
   get "/follows", to: "follows#index", as: :follows
   get "/likes",   to: "likes#index",   as: :likes
   get "/search",  to: "search#index",  as: :search
 
-  resources :characters, only: [:new, :create, :show, :edit, :update, :destroy]
+  resources :characters, only: [ :new, :create, :show, :edit, :update, :destroy ]
 
-  resources :posts, only: [:new, :create, :show, :edit, :update, :destroy]
+  resources :posts, only: [ :new, :create, :show, :edit, :update, :destroy ]
 end

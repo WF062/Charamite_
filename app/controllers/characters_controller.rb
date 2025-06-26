@@ -1,5 +1,5 @@
 class CharactersController < ApplicationController
-  before_action :require_login, only: [:new, :create, :show]
+  before_action :require_login, only: [ :new, :create, :show ]
 
   def new
     @character = Character.new
@@ -7,8 +7,8 @@ class CharactersController < ApplicationController
 
   def create
     @character = Character.new(character_params)
-    @character.user = current_user 
-    @character.is_public = params[:visibility] == "公開" 
+    @character.user = current_user
+    @character.is_public = params[:visibility] == "公開"
 
     if @character.save
       redirect_to character_path(@character)
