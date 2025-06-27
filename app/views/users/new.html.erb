@@ -1,6 +1,17 @@
 <div class="w-full max-w-xl mx-auto mt-20 px-6 py-10 bg-white rounded-lg">
   <h1 class="text-4xl font-bold text-center mb-8">アカウント新規作成</h1>
 
+  <% if @user.errors.any? %>
+    <div class="mb-6 p-4 bg-red-100 text-red-700 rounded border border-red-300">
+      <p class="font-bold mb-2">入力に不備があります：</p>
+      <ul class="list-disc list-inside text-sm">
+        <% @user.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
   <%= form_with model: @user, local: true, data: { turbo: false } do |f| %>
     <div class="mb-6">
       <%= f.label :name, "ユーザー名", class: "block text-sm font-semibold mb-1" %>
