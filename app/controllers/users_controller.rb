@@ -56,11 +56,11 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    # Sorceryでは password_confirmation は使わないので削除
     params.require(:user).permit(
       :name,
       :email,
       :password,
+      :password_confirmation, 
       :bio,
       :icon
     )
